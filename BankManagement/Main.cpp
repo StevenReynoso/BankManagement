@@ -2,11 +2,15 @@
 #include "Headers/admin.h"
 #include "Headers/Customer.h"
 #include "Headers/Staff.h"
+#include "Headers/Mysql.h"
+
 
 
 
 int main() {
-
+	Sql sql;
+	
+	sql.mySqlConnect();
 
 	int choice = 0;
 

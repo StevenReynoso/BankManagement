@@ -1,19 +1,21 @@
 #pragma once
+#include <iostream>
 
-//#ifndef MYSQLDB_H
-//#define MYSQLDB_H
-
-#include <string>
-
-class MySQLDB {
+class Sql
+{
 public:
-    MySQLDB();
-    ~MySQLDB();
-    void connect();
-    void close();
-    bool insertAccount(const std::string& name, const std::string& address, int acc, const std::string& pasW, int bal);
-    bool deleteAccount(int acc);
-    // add more functions for handling accounts and employees
+	void mySqlConnect();
+	void sqladdAcc(std::string name,std::string address, std::string pasW, int acc, int bal);
+	void sqldeleteAcc();
+	void sqlcheckAcc();
+	void sqleditAcc();
+	void sqlcheckHistory();
+	void sqltransfer();
+	void sqlwithdrawal();
+	void sqldeposit();
+
+	void sqladdEmployee();
+	void sqldeleteEmployee();
+	void sqlcheckEmployee();
 };
 
-//#endif // MYSQLDB_H
