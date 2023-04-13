@@ -8,7 +8,7 @@
 
 const std::string server = "tcp://localhost:3306";
 const std::string username = "root";
-const std::string password = "Whatisup123456789";
+const std::string password = 
 
 sql::Driver* driver;
 sql::Connection* con;
