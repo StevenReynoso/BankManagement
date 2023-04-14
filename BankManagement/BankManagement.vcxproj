@@ -144,6 +144,7 @@
     <ClInclude Include="Headers\Bank_Account.h" />
     <ClInclude Include="Headers\admin.h" />
     <ClInclude Include="Headers\Customer.h" />
+    <ClInclude Include="Headers\main.h" />
     <ClInclude Include="Headers\Mysql.h" />
     <ClInclude Include="Headers\Staff.h" />
   </ItemGroup>

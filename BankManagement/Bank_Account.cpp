@@ -98,9 +98,10 @@ void Bank_Account::deleteAcc() {
     int acc = 0;
     std::cout << "Enter Account Number \n";
     std::cin >> acc;
-    ////load server
-    ////delete account / pass
-    ////update server
+    std::cout << "Are u sure you would like to delete this acc? " << acc << "\n";
+
+    sql.sqlDeleteAcc(acc);
+
 }
 
     /// <summary>
@@ -110,16 +111,50 @@ void Bank_Account::deleteAcc() {
 void Bank_Account::checkAcc() {
     std::string name;
     int acc = 0;
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     std::cout << "please Enter Customers Name \n";
     std::getline(std::cin, name);
 
     std::cout << "Please Enter Customers Account Number \n";
     std::cin >> acc;
 
-    // pull up these from mysql
+    sql.sqlCheckAcc(name, acc);
 };
 void Bank_Account::editAcc() {
+    std::string name, address;
+    int acc = 0, choice = 0;
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    while (choice != 1 && choice != 2) {
+        std::cout << "Would you like to update  \n";
+        std::cout << "1 - Name \n";
+        std::cout << "2 - Address \n";
 
+        std::cin >> choice;
+        switch (choice)
+        {
+        case 1: {
+            std::cout << "Please Enter Customers New Name \n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::getline(std::cin, name);
+            break;
+        }
+        case 2: {
+            std::cout << "Please Enter Customers New Address \n";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::getline(std::cin, address);
+            break;
+        }
+        default: std::cout << "Select an appropriate number \n";
+        }
+    }
+    
+
+    std::cout << "Please Enter Customers Account Number \n";
+    std::cin >> acc;
+
+    sql.sqlEditAcc(name, address, acc, choice);
 };
 void Bank_Account::checkHistory() {
     std::string name;
@@ -133,35 +168,79 @@ void Bank_Account::checkHistory() {
 void Bank_Account::transfer() {
     int acc = 0, accT = 0, amount = 0;
 
-    std::cout << "Please Enter Customers Account Number \n";
+    std::cout << "Please Enter Customer Account Number: \n";
     std::cin >> acc;
 
-    std::cout << "Please Enter Account Number to be transferred to \n";
+    // Check if the account exists
+    if (!sql.checkAccountExists(acc)) {
+        std::cout << "Error: Account not found \n";
+        return;
+    }
+
+    std::cout << "Please Enter Account Number to Transfer To: \n";
     std::cin >> accT;
 
-    std::cout << "Please Enter Transfer Amount \n";                // check if they can transfer that ammount
-    std::cout << amount;
+    // Check if the transfer account exists
+    if (!sql.checkAccountExists(accT)) {
+        std::cout << "Error: Transfer account not found \n";
+        return;
+    }
 
-    /// 
-};
+    std::cout << "Please Enter Transfer Amount: \n";
+    std::cin >> amount;
+
+    // Check if the transfer amount is valid
+    if (amount <= 0) {
+        std::cout << "Error: Invalid transfer amount \n";
+        return;
+    }
+
+    // Check if the balance is sufficient
+    if (!sql.checkBalance(acc, amount)) {
+        std::cout << "Error: Insufficient balance \n";
+        return;
+    }
+
+    // Perform the transfer
+    sql.sqlTransfer(acc, accT, amount);
+}
 void Bank_Account::withdrawal() {
-    int acc = 0,  amount = 0;
+    int acc = 0, amount = 0;
 
-    std::cout << "Please Enter Customers Account Number \n";
+    std::cout << "Please Enter Customer's Account Number: ";
     std::cin >> acc;
 
-    std::cout << "Please Enter Withdrawal Amount \n";                // check if they can withdraw that ammount
-    std::cout << amount;
-};
+    if (!sql.checkAccountExists(acc)) {
+        std::cout << "Error: Account not found.\n";
+        return;
+    }
+
+    std::cout << "Please Enter Withdrawal Amount: ";
+    std::cin >> amount;
+
+    if (amount <= 0) {
+        std::cout << "Error: Invalid withdrawal amount.\n";
+        return;
+    }
+
+    sql.sqlWithdrawal(acc, amount);
+}
 void Bank_Account::deposit() {
     int acc = 0, amount = 0;
 
     std::cout << "Please Enter Customers Account Number \n";
     std::cin >> acc;
 
-    std::cout << "Please Enter Deposit Amount \n";                // check if they can deposit that ammount
-    std::cout << amount;
-};
+    if (!sql.checkAccountExists(acc)) {
+        std::cout << "Error: Account not found.\n";
+        return;
+    }
+
+    std::cout << "Please Enter Deposit Amount \n";
+    std::cin >> amount;
+
+    sql.sqlDeposit(acc, amount);
+}
 
 void Bank_Account::addEmployee() {
     std::string name, address;
@@ -189,8 +268,7 @@ void Bank_Account::deleteEmployee() {
 
     // delete from database
 };
-void Bank_Account::
-checkEmployee() {
+void Bank_Account::checkEmployee() {
     std::string name;
     int empNo;
 

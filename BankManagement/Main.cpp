@@ -3,15 +3,20 @@
 #include "Headers/Customer.h"
 #include "Headers/Staff.h"
 #include "Headers/Mysql.h"
-
-
+#include "Headers/main.h"
 
 
 int main() {
 	Sql sql;
 	
 	sql.mySqlConnect();
+	mainMenu();
 
+	system("pause");
+	return 0;
+}
+
+void mainMenu() {
 	int choice = 0;
 
 	while (choice != 4) {
@@ -30,7 +35,4 @@ int main() {
 		default: std::cout << "Please enter a number 1 through 4 ";
 		}
 	}
-
-	system("pause");
-	return 0;
 }
